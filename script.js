@@ -186,13 +186,7 @@
 
   const form = qs(".cta__form");
   if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-
+    const buildMailtoHref = () => {
       const name = (qs("#f-name", form)?.value || "").trim();
       const email = (qs("#f-email", form)?.value || "").trim();
       const company = (qs("#f-company", form)?.value || "").trim();
@@ -224,30 +218,61 @@
       ];
       const body = bodyLines.join("\r\n");
 
-      const href =
+      // Recipient left unencoded (mailto: parsers handle raw addresses best).
+      // Only subject/body are URL-encoded.
+      return (
         "mailto:" +
-        encodeURIComponent(INQUIRY_TO) +
+        INQUIRY_TO +
         "?subject=" +
         encodeURIComponent(subject) +
         "&body=" +
-        encodeURIComponent(body);
+        encodeURIComponent(body)
+      );
+    };
 
+    // Triggers the OS default mail handler by synthesising a real click on
+    // an <a href="mailto:…"> element. This is the most reliable cross-browser
+    // method — more so than `window.location.href = "mailto:…"`, which some
+    // browsers treat as a navigation and silently suppress if no handler is
+    // registered.
+    const openMailClient = (href) => {
+      const a = document.createElement("a");
+      a.href = href;
+      a.target = "_self";
+      a.rel = "noopener";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      requestAnimationFrame(() => a.remove());
+    };
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const href = buildMailtoHref();
       const success = qs(".form-success", form);
       const btn = qs("button[type='submit']", form);
+      const originalLabel = btn ? btn.textContent : "";
+
       if (btn) {
         btn.disabled = true;
-        const original = btn.textContent;
         btn.textContent = L.sending;
-        setTimeout(() => {
-          btn.disabled = false;
-          btn.textContent = L.again;
-          btn.dataset.originalLabel = original;
-        }, 600);
       }
+
+      openMailClient(href);
+
       if (success) success.hidden = false;
 
-      // Open the user's default mail client with the pre-filled draft
-      window.location.href = href;
+      setTimeout(() => {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = originalLabel;
+        }
+      }, 900);
     });
   }
 })();
