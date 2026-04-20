@@ -145,31 +145,109 @@
   updateTz();
   setInterval(updateTz, 30 * 1000);
 
-  // Form submission (demo)
+  // Form submission — open a pre-composed email draft in the user's
+  // default mail client. The recipient is kept here (not rendered in the
+  // HTML) so the address stays out of view and bot scrapers.
+  const INQUIRY_TO = "radu.r.andrei@outlook.com";
+  const isRo = document.documentElement.lang === "ro";
+  const L = isRo
+    ? {
+        subjectPrefix: "Cerere proiect nou",
+        subjectServices: "servicii",
+        greeting: "Bună,",
+        intro: "Sunt interesat(ă) de o colaborare. Iată detaliile:",
+        name: "Nume",
+        email: "Email",
+        company: "Companie",
+        budget: "Buget estimat",
+        services: "Servicii solicitate",
+        message: "Despre proiect",
+        closing: "Aștept răspunsul vostru. Mulțumesc!",
+        none: "(niciunul selectat)",
+        sending: "Se deschide draft-ul…",
+        again: "Deschide un alt draft",
+      }
+    : {
+        subjectPrefix: "New project inquiry",
+        subjectServices: "services",
+        greeting: "Hi,",
+        intro: "I'm interested in working with you. Here are the details:",
+        name: "Name",
+        email: "Email",
+        company: "Company",
+        budget: "Estimated budget",
+        services: "Services requested",
+        message: "About the project",
+        closing: "Looking forward to hearing from you. Thanks!",
+        none: "(none selected)",
+        sending: "Opening draft…",
+        again: "Open another draft",
+      };
+
   const form = qs(".cta__form");
   if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const ok = form.checkValidity();
-      if (!ok) {
+      if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
+
+      const name = (qs("#f-name", form)?.value || "").trim();
+      const email = (qs("#f-email", form)?.value || "").trim();
+      const company = (qs("#f-company", form)?.value || "").trim();
+      const budget = (qs("#f-budget", form)?.value || "").trim();
+      const message = (qs("#f-msg", form)?.value || "").trim();
+      const services = qsa('input[name="service"]:checked', form)
+        .map((i) => i.nextElementSibling?.textContent?.trim() || i.value)
+        .join(", ");
+
+      const servicesLabel = services || L.none;
+      const subject = `${L.subjectPrefix} — ${services || L.subjectServices}`;
+
+      const bodyLines = [
+        L.greeting,
+        "",
+        L.intro,
+        "",
+        `• ${L.name}: ${name}`,
+        `• ${L.email}: ${email}`,
+        `• ${L.company}: ${company}`,
+        `• ${L.budget}: ${budget}`,
+        `• ${L.services}: ${servicesLabel}`,
+        "",
+        `${L.message}:`,
+        message,
+        "",
+        L.closing,
+        name,
+      ];
+      const body = bodyLines.join("\r\n");
+
+      const href =
+        "mailto:" +
+        encodeURIComponent(INQUIRY_TO) +
+        "?subject=" +
+        encodeURIComponent(subject) +
+        "&body=" +
+        encodeURIComponent(body);
+
       const success = qs(".form-success", form);
       const btn = qs("button[type='submit']", form);
       if (btn) {
         btn.disabled = true;
-        btn.textContent = "Sending…";
-      }
-      setTimeout(() => {
-        if (success) success.hidden = false;
-        form.querySelectorAll("input, textarea, select").forEach((i) => (i.value = ""));
-        qsa(".chip-opt input:checked", form).forEach((i) => (i.checked = false));
-        if (btn) {
+        const original = btn.textContent;
+        btn.textContent = L.sending;
+        setTimeout(() => {
           btn.disabled = false;
-          btn.textContent = "Send another inquiry";
-        }
-      }, 900);
+          btn.textContent = L.again;
+          btn.dataset.originalLabel = original;
+        }, 600);
+      }
+      if (success) success.hidden = false;
+
+      // Open the user's default mail client with the pre-filled draft
+      window.location.href = href;
     });
   }
 })();
