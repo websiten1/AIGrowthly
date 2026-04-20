@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" role="img" aria-label="AIGrowthly">
+  <defs>
+    <linearGradient id="agMark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="55%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="agText" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#c9cdd6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Mark: concentric triangular "A" with ascending bars -->
+  <g transform="translate(2,4)">
+    <path d="M20 2 L38 38 L32 38 L28 30 L12 30 L8 38 L2 38 Z M15 24 L25 24 L20 14 Z"
+          fill="url(#agMark)"/>
+    <!-- ascending bars representing growth -->
+    <rect x="42" y="30" width="3" height="8" rx="1" fill="url(#agMark)" opacity="0.55"/>
+    <rect x="47" y="25" width="3" height="13" rx="1" fill="url(#agMark)" opacity="0.75"/>
+    <rect x="52" y="18" width="3" height="20" rx="1" fill="url(#agMark)"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="600" letter-spacing="-0.3">
+    <text x="66" y="30" font-size="20" fill="url(#agText)">AI</text>
+    <text x="90" y="30" font-size="20" fill="url(#agText)" font-weight="400">Growthly</text>
+  </g>
+</svg>
