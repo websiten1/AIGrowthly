@@ -23,10 +23,10 @@
   --radius-sm: 10px;
   --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 20px 60px -30px rgba(0, 0, 0, 0.7);
   --shadow-2: 0 30px 80px -40px rgba(99, 102, 241, 0.45);
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif: "Instrument Serif", "Times New Roman", Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-display: "Tomorrow", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 /* ----- reset ----- */
@@ -49,8 +49,9 @@ body {
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.65;
   font-weight: 400;
+  letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -147,10 +148,9 @@ button {
   background: rgba(255, 255, 255, 0.02);
   border-bottom: 1px solid var(--border);
   font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
   color: var(--text-dim);
 }
 .announce__row {
@@ -303,19 +303,17 @@ button {
   padding: 0 20px;
   border-radius: 999px;
   font-family: var(--font-display);
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
   border: 1px solid transparent;
   transition: transform 0.2s ease, background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
   white-space: nowrap;
 }
 .btn--lg {
   height: 52px;
-  padding: 0 28px;
-  font-size: 13px;
-  letter-spacing: 0.12em;
+  padding: 0 26px;
+  font-size: 15px;
 }
 .btn--primary {
   background: linear-gradient(180deg, #ffffff 0%, #e4e6ec 100%);
@@ -365,23 +363,22 @@ button {
   padding: 3px 10px;
   border-radius: 999px;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 10.5px;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(42px, 6vw, 84px);
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-  font-weight: 900;
-  text-transform: uppercase;
+  font-size: clamp(40px, 5.8vw, 80px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 600;
   margin: 0 0 24px;
 }
 .hero__title .serif {
-  text-transform: none;
   font-weight: 400;
+  letter-spacing: -0.01em;
 }
 .hero__title .serif {
   font-size: 1.08em;
@@ -418,8 +415,8 @@ button {
 .hero__meta strong {
   font-family: var(--font-display);
   font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.015em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 .hero__meta span {
   color: var(--text-mute);
@@ -681,8 +678,8 @@ button {
   display: inline-block;
   font-family: var(--font-display);
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: transparent;
   background: var(--grad);
@@ -692,15 +689,13 @@ button {
 }
 .section__title {
   font-family: var(--font-display);
-  font-size: clamp(32px, 4.2vw, 60px);
-  line-height: 1;
-  letter-spacing: -0.025em;
-  font-weight: 900;
-  text-transform: uppercase;
+  font-size: clamp(32px, 4.2vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 600;
   margin: 0 0 18px;
 }
 .section__title .serif {
-  text-transform: none;
   font-weight: 400;
   letter-spacing: -0.01em;
 }
@@ -786,9 +781,8 @@ button {
   font-family: var(--font-display);
   font-size: 24px;
   margin: 0 0 10px;
-  letter-spacing: -0.01em;
-  font-weight: 800;
-  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  font-weight: 600;
 }
 .svc p {
   color: var(--text-dim);
@@ -839,12 +833,11 @@ button {
 }
 .metrics__intro h2 {
   font-family: var(--font-display);
-  font-size: clamp(28px, 3.4vw, 48px);
-  line-height: 1.02;
+  font-size: clamp(28px, 3.4vw, 46px);
+  line-height: 1.08;
   margin: 10px 0 18px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.03em;
 }
 .metrics__intro p {
   color: var(--text-dim);
@@ -872,9 +865,9 @@ button {
 }
 .stat b {
   font-family: var(--font-display);
-  font-size: 46px;
-  font-weight: 900;
-  letter-spacing: -0.02em;
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   font-feature-settings: "tnum";
   background: linear-gradient(180deg, #ffffff, #c4b5fd);
   -webkit-background-clip: text;
@@ -936,11 +929,10 @@ button {
 .case h3 {
   font-family: var(--font-display);
   font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   margin: 0 0 18px;
-  line-height: 1.15;
+  line-height: 1.25;
 }
 .case__metrics {
   display: flex;
@@ -1003,9 +995,8 @@ button {
 .step h3 {
   font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.005em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   margin: 0 0 10px;
 }
 .step p {
@@ -1180,10 +1171,9 @@ button {
 }
 .loc h3 {
   font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.015em;
-  text-transform: uppercase;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   margin: 0;
   display: flex;
   align-items: center;
@@ -1271,10 +1261,9 @@ button {
 .post h3 {
   font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.005em;
-  text-transform: uppercase;
-  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
   margin: 0;
 }
 .post p {
@@ -1336,15 +1325,13 @@ button {
 }
 .cta__title {
   font-family: var(--font-display);
-  font-size: clamp(32px, 4.2vw, 56px);
-  line-height: 1;
-  letter-spacing: -0.025em;
-  font-weight: 900;
-  text-transform: uppercase;
+  font-size: clamp(32px, 4.2vw, 54px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 600;
   margin: 12px 0 20px;
 }
 .cta__title .serif {
-  text-transform: none;
   font-weight: 400;
   letter-spacing: -0.01em;
 }
