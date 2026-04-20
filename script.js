@@ -50,11 +50,25 @@
     });
   });
 
-  // Reveal on scroll
+  // Reveal on scroll (staggered within each group, HH-style)
   const revealTargets = qsa(
-    "section .section__head, .svc, .case, .step, .stack__cat, .stat, .quote, .loc, .post, .panel, .logos__row, .awards__items, .cta__form, .cta__text"
+    "section .section__head, .svc, .case, .step, .stack__cat, .stat, .quote, .loc, .post, .panel, .logos__row, .awards__items, .cta__form, .cta__text, .hero__content > *, .hero__visual"
   );
   revealTargets.forEach((el) => el.classList.add("reveal"));
+
+  // Stagger siblings of the same type for a cascading cascade
+  const stagger = (selector, step = 80, max = 360) => {
+    qsa(selector).forEach((parent) => {
+      let i = 0;
+      parent.querySelectorAll(":scope > *").forEach((child) => {
+        if (child.classList.contains("reveal")) {
+          child.style.setProperty("--reveal-delay", `${Math.min(i * step, max)}ms`);
+          i += 1;
+        }
+      });
+    });
+  };
+  stagger(".svc-grid, .work__grid, .steps, .stack__grid, .quotes__grid, .loc-grid, .insights__grid, .metrics__stats, .hero__content");
 
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(

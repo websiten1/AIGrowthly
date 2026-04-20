@@ -16,7 +16,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Tomorrow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -148,21 +148,37 @@
           </div>
         </aside>
       </div>
+      <span class="scroll-cue" aria-hidden="true">
+        Scroll
+        <svg viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 2 V16 M2 11 L7 16 L12 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
     </section>
 
     <!-- Trust / logos -->
     <section class="logos" aria-label="Clients we have partnered with">
       <div class="container">
         <p class="logos__label">Trusted by operators at</p>
-        <div class="logos__row">
-          <!-- Abstract wordmark SVGs -->
-          <svg viewBox="0 0 140 40" aria-label="Northwind"><text x="0" y="27" font-family="Inter" font-weight="700" font-size="22" fill="currentColor">NORTHWIND</text><circle cx="132" cy="14" r="4" fill="currentColor"/></svg>
-          <svg viewBox="0 0 140 40" aria-label="Helvetia Labs"><rect x="0" y="8" width="22" height="22" fill="currentColor"/><text x="30" y="27" font-family="Instrument Serif" font-style="italic" font-size="22" fill="currentColor">Helvetia</text></svg>
-          <svg viewBox="0 0 140 40" aria-label="Quantive"><polygon points="0,30 12,10 24,30" fill="none" stroke="currentColor" stroke-width="2"/><text x="30" y="27" font-family="Inter" font-weight="600" font-size="22" fill="currentColor">Quantive</text></svg>
-          <svg viewBox="0 0 140 40" aria-label="Meridian Bank"><circle cx="14" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="20" r="4" fill="currentColor"/><text x="34" y="27" font-family="Inter" font-weight="500" font-size="20" fill="currentColor" letter-spacing="2">MERIDIAN</text></svg>
-          <svg viewBox="0 0 140 40" aria-label="Ferraro"><text x="0" y="28" font-family="Instrument Serif" font-size="26" fill="currentColor">Ferraro</text><rect x="100" y="22" width="28" height="3" fill="currentColor"/></svg>
-          <svg viewBox="0 0 140 40" aria-label="Paloma"><path d="M2 30 L14 10 L26 30 L20 30 L14 20 L8 30 Z" fill="currentColor"/><text x="32" y="27" font-family="Inter" font-weight="700" font-size="20" fill="currentColor">PALOMA</text></svg>
-          <svg viewBox="0 0 140 40" aria-label="Stratos"><text x="0" y="27" font-family="JetBrains Mono" font-weight="500" font-size="20" fill="currentColor">stratos/</text><rect x="92" y="10" width="3" height="20" fill="currentColor"/><rect x="98" y="6" width="3" height="24" fill="currentColor"/><rect x="104" y="2" width="3" height="28" fill="currentColor"/></svg>
+        <div class="logos__row marquee">
+          <div class="marquee__track" aria-hidden="false">
+            <!-- set 1 -->
+            <svg viewBox="0 0 140 40" aria-label="Northwind"><text x="0" y="27" font-family="Inter" font-weight="700" font-size="22" fill="currentColor">NORTHWIND</text><circle cx="132" cy="14" r="4" fill="currentColor"/></svg>
+            <svg viewBox="0 0 140 40" aria-label="Helvetia Labs"><rect x="0" y="8" width="22" height="22" fill="currentColor"/><text x="30" y="27" font-family="Instrument Serif" font-style="italic" font-size="22" fill="currentColor">Helvetia</text></svg>
+            <svg viewBox="0 0 140 40" aria-label="Quantive"><polygon points="0,30 12,10 24,30" fill="none" stroke="currentColor" stroke-width="2"/><text x="30" y="27" font-family="Inter" font-weight="600" font-size="22" fill="currentColor">Quantive</text></svg>
+            <svg viewBox="0 0 140 40" aria-label="Meridian Bank"><circle cx="14" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="20" r="4" fill="currentColor"/><text x="34" y="27" font-family="Inter" font-weight="500" font-size="20" fill="currentColor" letter-spacing="2">MERIDIAN</text></svg>
+            <svg viewBox="0 0 140 40" aria-label="Ferraro"><text x="0" y="28" font-family="Instrument Serif" font-size="26" fill="currentColor">Ferraro</text><rect x="100" y="22" width="28" height="3" fill="currentColor"/></svg>
+            <svg viewBox="0 0 140 40" aria-label="Paloma"><path d="M2 30 L14 10 L26 30 L20 30 L14 20 L8 30 Z" fill="currentColor"/><text x="32" y="27" font-family="Inter" font-weight="700" font-size="20" fill="currentColor">PALOMA</text></svg>
+            <svg viewBox="0 0 140 40" aria-label="Stratos"><text x="0" y="27" font-family="JetBrains Mono" font-weight="500" font-size="20" fill="currentColor">stratos/</text><rect x="92" y="10" width="3" height="20" fill="currentColor"/><rect x="98" y="6" width="3" height="24" fill="currentColor"/><rect x="104" y="2" width="3" height="28" fill="currentColor"/></svg>
+            <!-- set 2 (duplicated for seamless loop) -->
+            <svg viewBox="0 0 140 40" aria-hidden="true"><text x="0" y="27" font-family="Inter" font-weight="700" font-size="22" fill="currentColor">NORTHWIND</text><circle cx="132" cy="14" r="4" fill="currentColor"/></svg>
+            <svg viewBox="0 0 140 40" aria-hidden="true"><rect x="0" y="8" width="22" height="22" fill="currentColor"/><text x="30" y="27" font-family="Instrument Serif" font-style="italic" font-size="22" fill="currentColor">Helvetia</text></svg>
+            <svg viewBox="0 0 140 40" aria-hidden="true"><polygon points="0,30 12,10 24,30" fill="none" stroke="currentColor" stroke-width="2"/><text x="30" y="27" font-family="Inter" font-weight="600" font-size="22" fill="currentColor">Quantive</text></svg>
+            <svg viewBox="0 0 140 40" aria-hidden="true"><circle cx="14" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="20" r="4" fill="currentColor"/><text x="34" y="27" font-family="Inter" font-weight="500" font-size="20" fill="currentColor" letter-spacing="2">MERIDIAN</text></svg>
+            <svg viewBox="0 0 140 40" aria-hidden="true"><text x="0" y="28" font-family="Instrument Serif" font-size="26" fill="currentColor">Ferraro</text><rect x="100" y="22" width="28" height="3" fill="currentColor"/></svg>
+            <svg viewBox="0 0 140 40" aria-hidden="true"><path d="M2 30 L14 10 L26 30 L20 30 L14 20 L8 30 Z" fill="currentColor"/><text x="32" y="27" font-family="Inter" font-weight="700" font-size="20" fill="currentColor">PALOMA</text></svg>
+            <svg viewBox="0 0 140 40" aria-hidden="true"><text x="0" y="27" font-family="JetBrains Mono" font-weight="500" font-size="20" fill="currentColor">stratos/</text><rect x="92" y="10" width="3" height="20" fill="currentColor"/><rect x="98" y="6" width="3" height="24" fill="currentColor"/><rect x="104" y="2" width="3" height="28" fill="currentColor"/></svg>
+          </div>
         </div>
       </div>
     </section>
