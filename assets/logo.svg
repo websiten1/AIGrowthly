@@ -1,29 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" role="img" aria-label="AIGrowthly">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" role="img" aria-label="AIGrowthly">
   <defs>
     <linearGradient id="agMark" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="0%" stop-color="#a78bfa"/>
       <stop offset="55%" stop-color="#6366f1"/>
       <stop offset="100%" stop-color="#06b6d4"/>
     </linearGradient>
-    <linearGradient id="agText" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#c9cdd6"/>
-    </linearGradient>
   </defs>
 
-  <!-- Mark: concentric triangular "A" with ascending bars -->
-  <g transform="translate(2,4)">
-    <path d="M20 2 L38 38 L32 38 L28 30 L12 30 L8 38 L2 38 Z M15 24 L25 24 L20 14 Z"
+  <!-- Mark: bold geometric "A" with upward growth chevron -->
+  <g transform="translate(2,6)">
+    <!-- Solid triangle A with crossbar -->
+    <path d="M18 0 L36 36 L28 36 L24.4 28.4 L11.6 28.4 L8 36 L0 36 Z M14 22 L22 22 L18 13 Z"
           fill="url(#agMark)"/>
-    <!-- ascending bars representing growth -->
-    <rect x="42" y="30" width="3" height="8" rx="1" fill="url(#agMark)" opacity="0.55"/>
-    <rect x="47" y="25" width="3" height="13" rx="1" fill="url(#agMark)" opacity="0.75"/>
-    <rect x="52" y="18" width="3" height="20" rx="1" fill="url(#agMark)"/>
+    <!-- Growth chevron accent (reads as an upward arrow/peak) -->
+    <path d="M40 18 L46 10 L52 18"
+          stroke="url(#agMark)" stroke-width="3"
+          fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
-  <!-- Wordmark -->
-  <g font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="600" letter-spacing="-0.3">
-    <text x="66" y="30" font-size="20" fill="url(#agText)">AI</text>
-    <text x="90" y="30" font-size="20" fill="url(#agText)" font-weight="400">Growthly</text>
-  </g>
+  <!-- Wordmark (single weight for clarity) -->
+  <text x="68" y="32"
+        font-family="'Inter', 'Helvetica Neue', Arial, sans-serif"
+        font-weight="700" font-size="22" letter-spacing="-0.5"
+        fill="#f3f4f7">AIGrowthly</text>
 </svg>
