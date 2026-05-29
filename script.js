@@ -1,278 +1,139 @@
-/* AIGrowthly — interactions */
-
+/* aigrowthly — shared site behaviour */
 (function () {
-  "use strict";
+  'use strict';
 
-  const qs = (s, c = document) => c.querySelector(s);
-  const qsa = (s, c = document) => Array.from(c.querySelectorAll(s));
-
-  // Year in footer
-  const yearEl = qs("#year");
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  // Header state on scroll
-  const header = qs("#site-header");
-  const onScroll = () => {
-    if (!header) return;
-    header.classList.toggle("is-scrolled", window.scrollY > 8);
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-
-  // Mobile menu
-  const toggle = qs(".menu-toggle");
-  if (toggle && header) {
-    toggle.addEventListener("click", () => {
-      const open = header.classList.toggle("is-open");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  /* mobile nav toggle */
+  function initNav() {
+    var header = document.querySelector('.site-header');
+    var toggle = document.querySelector('.nav-toggle');
+    if (!header || !toggle) return;
+    toggle.addEventListener('click', function () {
+      header.classList.toggle('nav-open');
+      var open = header.classList.contains('nav-open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
-    qsa(".nav a").forEach((a) =>
-      a.addEventListener("click", () => {
-        header.classList.remove("is-open");
-        toggle.setAttribute("aria-expanded", "false");
-      })
-    );
+    header.querySelectorAll('.nav-links a').forEach(function (a) {
+      a.addEventListener('click', function () { header.classList.remove('nav-open'); });
+    });
   }
 
-  // Smooth-anchor offset for sticky header
-  qsa('a[href^="#"]').forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const id = link.getAttribute("href");
-      if (!id || id === "#" || id.length < 2) return;
-      const target = qs(id);
-      if (!target) return;
-      e.preventDefault();
-      const top =
-        target.getBoundingClientRect().top +
-        window.scrollY -
-        (header ? header.offsetHeight + 8 : 0);
-      window.scrollTo({ top, behavior: "smooth" });
-    });
-  });
+  /* scroll reveal */
+  function initReveal() {
+    var els = document.querySelectorAll('[data-reveal]');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (e) { e.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (e) { io.observe(e); });
+  }
 
-  // Reveal on scroll (staggered within each group, HH-style)
-  const revealTargets = qsa(
-    "section .section__head, .svc, .case, .step, .stack__cat, .stat, .quote, .loc, .post, .panel, .logos__row, .awards__items, .cta__form, .cta__text, .hero__content > *, .hero__visual"
-  );
-  revealTargets.forEach((el) => el.classList.add("reveal"));
-
-  // Stagger siblings of the same type for a cascading cascade
-  const stagger = (selector, step = 80, max = 360) => {
-    qsa(selector).forEach((parent) => {
-      let i = 0;
-      parent.querySelectorAll(":scope > *").forEach((child) => {
-        if (child.classList.contains("reveal")) {
-          child.style.setProperty("--reveal-delay", `${Math.min(i * step, max)}ms`);
-          i += 1;
+  /* count-up for [data-count] */
+  function initCounters() {
+    var nums = document.querySelectorAll('[data-count]');
+    if (!nums.length) return;
+    var fmt = function (el, v) {
+      var end = parseFloat(el.getAttribute('data-count'));
+      var dec = (el.getAttribute('data-count').split('.')[1] || '').length;
+      var pre = el.getAttribute('data-prefix') || '';
+      var suf = el.getAttribute('data-suffix') || '';
+      return pre + v.toFixed(dec) + suf;
+    };
+    // Pre-fill final value so the span has size (and works without animation/JS-failure).
+    nums.forEach(function (el) { el.textContent = fmt(el, parseFloat(el.getAttribute('data-count'))); });
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        io.unobserve(el);
+        var end = parseFloat(el.getAttribute('data-count'));
+        var dur = 1300, t0 = null;
+        function step(ts) {
+          if (!t0) t0 = ts;
+          var p = Math.min((ts - t0) / dur, 1);
+          var e = 1 - Math.pow(1 - p, 3);
+          el.textContent = fmt(el, end * e);
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = fmt(el, end);
         }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0 });
+    nums.forEach(function (n) { io.observe(n); });
+  }
+
+  /* copy-to-clipboard for [data-copy] */
+  function initCopy() {
+    document.querySelectorAll('[data-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = btn.getAttribute('data-copy');
+        var done = function () {
+          btn.classList.add('copied');
+          var lbl = btn.querySelector('[data-copy-label]');
+          if (lbl) { var old = lbl.textContent; lbl.textContent = 'Copied!'; setTimeout(function () { lbl.textContent = old; btn.classList.remove('copied'); }, 1600); }
+        };
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, done);
+        else done();
       });
     });
-  };
-  stagger(".svc-grid, .work__grid, .steps, .stack__grid, .quotes__grid, .loc-grid, .insights__grid, .metrics__stats, .hero__content");
-
-  if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-    revealTargets.forEach((el) => io.observe(el));
-  } else {
-    revealTargets.forEach((el) => el.classList.add("is-in"));
   }
 
-  // Counters
-  const counters = qsa("[data-counter]");
-  const animateCount = (el) => {
-    const target = parseFloat(el.dataset.counter);
-    const suffix = el.dataset.suffix || "";
-    const duration = 1600;
-    const start = performance.now();
-    const from = 0;
-    const ease = (t) => 1 - Math.pow(1 - t, 3);
-    const tick = (now) => {
-      const p = Math.min(1, (now - start) / duration);
-      const v = from + (target - from) * ease(p);
-      el.textContent =
-        (target % 1 === 0 ? Math.round(v) : v.toFixed(1)).toLocaleString() +
-        suffix;
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-  if ("IntersectionObserver" in window && counters.length) {
-    const cio = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCount(entry.target);
-            cio.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    counters.forEach((el) => cio.observe(el));
-  } else {
-    counters.forEach(animateCount);
-  }
-
-  // Cursor-aware glow on service cards
-  qsa(".svc").forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
-      card.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
-    });
-  });
-
-  // Location local times
-  const tzEls = qsa("[data-tz]");
-  const fmt = (tz) =>
-    new Intl.DateTimeFormat("en-GB", {
-      timeZone: tz,
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(new Date());
-  const updateTz = () => tzEls.forEach((el) => (el.textContent = fmt(el.dataset.tz)));
-  updateTz();
-  setInterval(updateTz, 30 * 1000);
-
-  // Form submission — open a pre-composed email draft in the user's
-  // default mail client. The recipient is kept here (not rendered in the
-  // HTML) so the address stays out of view and bot scrapers.
-  const INQUIRY_TO = "radu.r.andrei@outlook.com";
-  const isRo = document.documentElement.lang === "ro";
-  const L = isRo
-    ? {
-        subjectPrefix: "Cerere proiect nou",
-        subjectServices: "servicii",
-        greeting: "Bună,",
-        intro: "Sunt interesat(ă) de o colaborare. Iată detaliile:",
-        name: "Nume",
-        email: "Email",
-        company: "Companie",
-        budget: "Buget estimat",
-        services: "Servicii solicitate",
-        message: "Despre proiect",
-        closing: "Aștept răspunsul vostru. Mulțumesc!",
-        none: "(niciunul selectat)",
-        sending: "Se deschide draft-ul…",
-        again: "Deschide un alt draft",
-      }
-    : {
-        subjectPrefix: "New project inquiry",
-        subjectServices: "services",
-        greeting: "Hi,",
-        intro: "I'm interested in working with you. Here are the details:",
-        name: "Name",
-        email: "Email",
-        company: "Company",
-        budget: "Estimated budget",
-        services: "Services requested",
-        message: "About the project",
-        closing: "Looking forward to hearing from you. Thanks!",
-        none: "(none selected)",
-        sending: "Opening draft…",
-        again: "Open another draft",
-      };
-
-  const form = qs(".cta__form");
-  if (form) {
-    const buildMailtoHref = () => {
-      const name = (qs("#f-name", form)?.value || "").trim();
-      const email = (qs("#f-email", form)?.value || "").trim();
-      const company = (qs("#f-company", form)?.value || "").trim();
-      const budget = (qs("#f-budget", form)?.value || "").trim();
-      const message = (qs("#f-msg", form)?.value || "").trim();
-      const services = qsa('input[name="service"]:checked', form)
-        .map((i) => i.nextElementSibling?.textContent?.trim() || i.value)
-        .join(", ");
-
-      const servicesLabel = services || L.none;
-      const subject = `${L.subjectPrefix} — ${services || L.subjectServices}`;
-
-      const bodyLines = [
-        L.greeting,
-        "",
-        L.intro,
-        "",
-        `• ${L.name}: ${name}`,
-        `• ${L.email}: ${email}`,
-        `• ${L.company}: ${company}`,
-        `• ${L.budget}: ${budget}`,
-        `• ${L.services}: ${servicesLabel}`,
-        "",
-        `${L.message}:`,
-        message,
-        "",
-        L.closing,
-        name,
-      ];
-      const body = bodyLines.join("\r\n");
-
-      // Recipient left unencoded (mailto: parsers handle raw addresses best).
-      // Only subject/body are URL-encoded.
-      return (
-        "mailto:" +
-        INQUIRY_TO +
-        "?subject=" +
-        encodeURIComponent(subject) +
-        "&body=" +
-        encodeURIComponent(body)
-      );
-    };
-
-    // Triggers the OS default mail handler by synthesising a real click on
-    // an <a href="mailto:…"> element. This is the most reliable cross-browser
-    // method — more so than `window.location.href = "mailto:…"`, which some
-    // browsers treat as a navigation and silently suppress if no handler is
-    // registered.
-    const openMailClient = (href) => {
-      const a = document.createElement("a");
-      a.href = href;
-      a.target = "_self";
-      a.rel = "noopener";
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.click();
-      requestAnimationFrame(() => a.remove());
-    };
-
-    form.addEventListener("submit", (e) => {
+  /* contact form -> mailto */
+  function initContactForm() {
+    var form = document.getElementById('contact-form');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-
-      const href = buildMailtoHref();
-      const success = qs(".form-success", form);
-      const btn = qs("button[type='submit']", form);
-      const originalLabel = btn ? btn.textContent : "";
-
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = L.sending;
-      }
-
-      openMailClient(href);
-
-      if (success) success.hidden = false;
-
-      setTimeout(() => {
-        if (btn) {
-          btn.disabled = false;
-          btn.textContent = originalLabel;
-        }
-      }, 900);
+      var g = function (n) { var el = form.elements[n]; return el ? el.value.trim() : ''; };
+      var subject = 'New website request — ' + (g('business') || 'Small business');
+      var lines = [
+        'Business name: ' + g('business'),
+        'What you do: ' + g('about'),
+        'Pages you want: ' + g('pages'),
+        'Sites you like: ' + g('likes'),
+        'Best email/phone: ' + g('contact'),
+        '',
+        'Notes:',
+        g('notes')
+      ];
+      var href = 'mailto:aigrowthly@outlook.com?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(lines.join('\n'));
+      var ok = document.getElementById('form-sent');
+      if (ok) ok.hidden = false;
+      window.location.href = href;
     });
   }
+
+  /* simple FAQ accordion */
+  function initFaq() {
+    document.querySelectorAll('.faq-item').forEach(function (item) {
+      var q = item.querySelector('.faq-q');
+      if (!q) return;
+      q.addEventListener('click', function () {
+        var open = item.classList.contains('open');
+        if (!q.closest('[data-faq-multi]')) {
+          (item.closest('.faq-list') || document).querySelectorAll('.faq-item.open').forEach(function (o) {
+            if (o !== item) { o.classList.remove('open'); var b = o.querySelector('.faq-q'); if (b) b.setAttribute('aria-expanded', 'false'); }
+          });
+        }
+        item.classList.toggle('open', !open);
+        q.setAttribute('aria-expanded', String(!open));
+      });
+    });
+  }
+
+  function ready(fn) {
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+  ready(function () {
+    var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+    initNav(); initReveal(); initCounters(); initCopy(); initContactForm(); initFaq();
+  });
 })();
